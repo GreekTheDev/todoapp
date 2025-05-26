@@ -1,4 +1,5 @@
 {
+  "$schema": "./package.schema.json",
   "name": "todoapp",
   "version": "1.0.0",
   "description": "first simple project in react. basically something like todoist",
@@ -16,7 +17,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-
   "bugs": {
     "url": "https://github.com/GreekTheDev/todoapp/issues"
   },
@@ -25,6 +25,7 @@
     "@types/react": "^19.1.5",
     "@types/react-dom": "^19.1.5",
     "@vitejs/plugin-react": "^4.5.0",
+    "npm-package-json-lint": "^8.0.0",
     "typescript": "^5.8.3",
     "vite": "^6.3.5"
   },

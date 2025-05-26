@@ -15,11 +15,19 @@ export interface RepeatConfig {
   monthsOfYear?: number[]; // miesiące (0-11, gdzie 0 to styczeń)
 }
 
+export interface Section {
+  id: string;
+  title: string;
+  projectId: string;
+  order: number;
+}
+
 export interface Task {
   id: string;
   title: string;
   completed: boolean;
   projectId: string;
+  sectionId?: string; // Opcjonalne pole dla zadań przypisanych do sekcji
   priority?: 'low' | 'medium' | 'high';
   dueDate?: string;
   notes?: string;
