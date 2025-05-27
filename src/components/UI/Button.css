@@ -1,0 +1,114 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  border: none;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  gap: var(--spacing-sm);
+}
+
+/* Variants */
+.button-primary {
+  background-color: var(--primary-color);
+  color: var(--text-on-primary);
+}
+
+.button-primary:hover:not(:disabled) {
+  background-color: var(--secondary-color);
+}
+
+.button-secondary {
+  background-color: var(--secondary-color);
+  color: var(--text-on-secondary);
+}
+
+.button-secondary:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.button-text {
+  background-color: transparent;
+  color: var(--primary-color);
+  padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+.button-text:hover:not(:disabled) {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.button-error {
+  background-color: var(--error-color);
+  color: white;
+}
+
+.button-error:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.button-success {
+  background-color: var(--success-color);
+  color: white;
+}
+
+.button-success:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.button-warning {
+  background-color: var(--warning-color);
+  color: var(--text-primary);
+}
+
+.button-warning:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+/* Sizes */
+.button-small {
+  font-size: 0.875rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.button-medium {
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+}
+
+.button-large {
+  font-size: 1.125rem;
+  padding: 0.75rem 1.5rem;
+}
+
+/* States */
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.button-full-width {
+  width: 100%;
+}
+
+.button-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-icon-only {
+  background-color: transparent;
+  color: var(--text-secondary);
+  padding: var(--spacing-xs);
+  border-radius: 50%;
+  min-width: 36px;
+  min-height: 36px;
+}
+
+.button-icon-only:hover:not(:disabled) {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--primary-color);
+}

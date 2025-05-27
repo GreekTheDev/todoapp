@@ -1,0 +1,32 @@
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--background-color);
+}
+
+.content {
+  flex: 1;
+  padding: var(--spacing-lg);
+  margin-left: 280px;
+  transition: margin-left var(--transition-normal);
+}
+
+.sidebar-collapsed .content {
+  margin-left: 60px;
+}
+
+@media (max-width: 768px) {
+  .content {
+    margin-left: 0;
+    padding: var(--spacing-md);
+  }
+  
+  .sidebar-collapsed .content {
+    margin-left: 0;
+  }
+  
+  /* Dodaj padding dla przycisku hamburger */
+  .content {
+    padding-left: calc(var(--spacing-md) + 40px);
+  }
+}

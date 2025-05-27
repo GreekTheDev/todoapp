@@ -1,0 +1,134 @@
+.subtask-list {
+  margin-top: var(--spacing-md);
+  padding-left: var(--spacing-md);
+  border-left: 2px solid var(--accent-color);
+}
+
+.subtask-list-title {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.subtasks {
+  list-style: none;
+}
+
+.subtask-item {
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.subtask-item:last-child {
+  border-bottom: none;
+}
+
+.subtask-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.subtask-main {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.subtask-checkbox-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.subtask-checkbox {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.subtask-checkbox-label {
+  position: relative;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--primary-color);
+  background-color: transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.subtask-checkbox:checked + .subtask-checkbox-label {
+  background-color: var(--primary-color);
+}
+
+.subtask-checkbox:checked + .subtask-checkbox-label::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.subtask-title {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  transition: color var(--transition-fast);
+}
+
+.subtask-item.completed .subtask-title {
+  text-decoration: line-through;
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+.subtask-actions {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.delete-icon {
+  color: var(--error-color);
+}
+
+.subtask-edit {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  width: 100%;
+}
+
+.subtask-edit-input {
+  width: 100%;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: 1px solid var(--primary-color);
+  border-radius: var(--border-radius-sm);
+  font-size: 0.9rem;
+}
+
+.subtask-edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-xs);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .subtask-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-xs);
+  }
+  
+  .subtask-actions {
+    margin-left: calc(var(--spacing-md) + var(--spacing-sm));
+  }
+}
