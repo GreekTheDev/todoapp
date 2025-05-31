@@ -14,22 +14,26 @@ const TaskList = () => {
   
   const [showAddTask, setShowAddTask] = useState(false);
   
-  const tasks = getTasksByProject(activeProject);
+  // Pobierz zadania i posortuj je według daty (od najwcześniejszych do najpóźniejszych)
+  const unsortedTasks = getTasksByProject(activeProject);
+  const tasks = [...unsortedTasks].sort((a, b) => {
+    // Jeśli zadanie nie ma daty, umieść je na końcu
+    if (!a.dueDate) return 1;
+    if (!b.dueDate) return -1;
+    
+    // Sortuj od najwcześniejszych do najpóźniejszych
+    return new Date(a.dueDate) - new Date(b.dueDate);
+  });
+  
   const activeProjectName = projects.find(p => p.id === activeProject)?.name || '';
 
   return (
     <div className="task-list-container">
       <div className="task-list-header">
         <h2 className="task-list-title">{activeProjectName}</h2>
-        <Button 
-          variant="primary"
-          onClick={() => setShowAddTask(true)}
-        >
-          +
-        </Button>
       </div>
       
-      {showAddTask && (
+      {showAddTask && activeProject !== 'completed' && (
         <TaskForm 
           onClose={() => setShowAddTask(false)} 
           projectId={activeProject}
@@ -39,7 +43,11 @@ const TaskList = () => {
       <div className="task-list">
         {tasks.length === 0 ? (
           <div className="empty-state">
-            <p>Brak zadań. Dodaj nowe zadanie, aby rozpocząć.</p>
+            {activeProject === 'completed' ? (
+              <p>Wszystko ukończone!</p>
+            ) : (
+              <p>Brak zadań. Dodaj nowe zadanie, aby rozpocząć.</p>
+            )}
           </div>
         ) : (
           tasks.map(task => (
@@ -47,6 +55,21 @@ const TaskList = () => {
           ))
         )}
       </div>
+      
+      {/* Ukryj przycisk dodawania zadania w projekcie "Ukończone zadania" */}
+      {activeProject !== 'completed' && (
+        <div className="add-task-button-container">
+          <Button 
+            variant="primary"
+            size="large"
+            className="add-task-button"
+            onClick={() => setShowAddTask(true)}
+            aria-label="Dodaj nowe zadanie"
+          >
+            +
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

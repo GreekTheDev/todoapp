@@ -1,16 +1,9 @@
-.task-form-container {
-  background-color: var(--surface-color);
-  border-radius: var(--border-radius-md);
-  box-shadow: var(--shadow-md);
-  margin-bottom: var(--spacing-md);
-  padding: var(--spacing-md);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
 .task-form {
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
+  min-height: 260px; /* Zwiększona minimalna wysokość formularza */
 }
 
 .task-form-title {
@@ -19,31 +12,229 @@
   font-size: 1.2rem;
 }
 
+/* Style dla dialogu wykrywania wielu linii */
+.multiline-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  text-align: start;
+  align-items: flex-start;
+}
+
+.multiline-dialog-title {
+  margin-bottom: var(--spacing-xs);
+  color: var(--text-primary);
+  font-size: 1.2rem;
+}
+
+.multiline-dialog-description {
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.multiline-preview {
+  background-color: rgba(0, 0, 0, 0.03);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.multiline-preview-main {
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.multiline-preview-subtasks ul {
+  margin-top: var(--spacing-xs);
+  padding-left: var(--spacing-lg);
+}
+
+.multiline-preview-subtasks li {
+  margin-bottom: var(--spacing-xs);
+}
+
+.multiline-dialog-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+@media (min-width: 768px) {
+  .multiline-dialog-actions {
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+}
+
 .form-group {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xs);
 }
 
-.form-group label {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
+/* Nowe style dla inputów bez ramek */
+.title-input, .description-input {
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0;
+  padding: var(--spacing-sm) 0;
+  font-size: 1rem;
+  background-color: transparent;
+  transition: border-color var(--transition-fast);
+}
+
+.title-input {
+  font-size: 1.1rem;
   font-weight: 500;
+}
+
+.title-input:focus, .description-input:focus {
+  border-bottom-color: var(--primary-color);
+  outline: none;
+}
+
+/* Wiersz z priorytetem i datą */
+.form-row {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+  margin-top: var(--spacing-xs);
+  margin-bottom: var(--spacing-lg); /* Dodatkowy margines na dole, aby zapewnić miejsce dla dropdown */
+}
+
+/* Dropdown priorytetu */
+.priority-dropdown-container {
+  position: relative;
+  width: 160px;
+}
+
+.priority-dropdown-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 40px;
+  padding: 0 var(--spacing-sm);
+  background-color: var(--surface-color);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: var(--border-radius-md);
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.priority-dropdown-button:hover {
+  border-color: var(--primary-color);
+}
+
+.dropdown-icon {
+  color: var(--text-secondary);
+}
+
+.priority-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 100%;
+  background-color: var(--surface-color);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-md);
+  z-index: 10;
+  overflow: hidden;
+  max-height: 200px; /* Zapewnienie odpowiedniej wysokości dla dropdown */
+}
+
+.priority-dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-sm);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.priority-dropdown-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.priority-icon {
+  display: inline-block;
+  width: 24px;
+  text-align: center;
+  transform: rotate(270deg);
+}
+
+.priority-name {
+  flex: 1;
+}
+
+/* Kolory priorytetów */
+.priority-dropdown-item.low .priority-icon,
+.priority-value.low .priority-icon {
+  color: var(--primary-color);
+}
+
+.priority-dropdown-item.medium .priority-icon,
+.priority-value.medium .priority-icon {
+  color: #FF9800;
+}
+
+.priority-dropdown-item.high .priority-icon,
+.priority-value.high .priority-icon {
+  color: #F44336;
+}
+
+/* Przycisk usuwania priorytetu */
+.clear-priority-button {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0;
+  font-size: 1rem;
+}
+
+.priority-dropdown-button:hover .clear-priority-button {
+  display: flex;
+}
+
+.clear-priority-button:hover {
+  color: var(--error-color);
 }
 
 .form-actions {
   display: flex;
   justify-content: flex-end;
   gap: var(--spacing-sm);
-  margin-top: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+}
+
+/* Przycisk wyłączony */
+.button-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* Ant Design DatePicker customization */
+.date-picker-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
 .date-picker {
   width: 100%;
   height: 40px;
   border-radius: var(--border-radius-md);
-  border: 1px solid var(--text-secondary);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   background-color: var(--surface-color);
   color: var(--text-primary);
   font-family: 'Poppins', sans-serif;
@@ -53,10 +244,146 @@
   border-color: var(--primary-color);
 }
 
+/* Ukryj przycisk "Teraz" w DatePicker */
+.ant-picker-now, .ant-picker-ranges {
+  display: none !important;
+}
+
+/* Dostosuj footer w DatePicker */
+.ant-picker-footer {
+  display: flex;
+  justify-content: space-around;
+}
+
+/* Style dla predefiniowanych zakresów dat */
+.date-picker-presets {
+  display: flex;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) 0;
+}
+
+.date-preset-button {
+  background: none;
+  border: none;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  font-size: 0.85rem;
+  color: var(--primary-color);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.date-preset-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Style dla wykrytej daty w tytule */
+.detected-date-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: 0.85rem;
+  color: var(--primary-color);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: rgba(var(--primary-color-rgb), 0.1);
+  border-radius: var(--border-radius-sm);
+  margin-top: var(--spacing-xs);
+}
+
+.detected-date-icon {
+  font-size: 1rem;
+}
+
+/* Style dla DatePicker w trybie ciemnym */
+[data-theme="dark"] .date-picker,
+[data-theme="dark"] .ant-picker {
+  background-color: var(--surface-color) !important;
+}
+
+[data-theme="dark"] .date-picker:hover,
+[data-theme="dark"] .date-picker:focus,
+[data-theme="dark"] .date-picker.ant-picker-focused,
+[data-theme="dark"] .date-picker.ant-picker-active,
+[data-theme="dark"] .ant-picker:hover,
+[data-theme="dark"] .ant-picker-focused {
+  background-color: var(--surface-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+/* Kolor tekstu w DatePicker w trybie ciemnym */
+[data-theme="dark"] .date-picker input::placeholder,
+[data-theme="dark"] .priority-dropdown-button {
+  color: var(--text-primary);
+}
+
+/* Zapewnienie stałego koloru tekstu w DatePicker w trybie ciemnym, nawet podczas hover */
+[data-theme="dark"] .date-picker input,
+[data-theme="dark"] .date-picker input:hover,
+[data-theme="dark"] .date-picker:hover input,
+[data-theme="dark"] .date-picker input:focus,
+[data-theme="dark"] .date-picker.ant-picker-focused input,
+[data-theme="dark"] .ant-picker input,
+[data-theme="dark"] .ant-picker input:hover,
+[data-theme="dark"] .ant-picker-focused input {
+  color: var(--text-primary) !important;
+}
+
+/* Zmiana koloru ikony kalendarza w trybie ciemnym */
+[data-theme="dark"] .date-picker .ant-picker-suffix,
+[data-theme="dark"] .date-picker .ant-picker-clear {
+  color: var(--text-primary);
+}
+
+/* Style dla panelu kalendarza */
+.ant-picker-dropdown {
+  z-index: 1100 !important; /* Upewnij się, że panel kalendarza jest zawsze na wierzchu */
+}
+
+/* Style dla panelu kalendarza w trybie ciemnym */
+[data-theme="dark"] .ant-picker-dropdown .ant-picker-panel-container {
+  background-color: var(--surface-color);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .ant-picker-dropdown .ant-picker-content th,
+[data-theme="dark"] .ant-picker-dropdown .ant-picker-header,
+[data-theme="dark"] .ant-picker-dropdown .ant-picker-header button,
+[data-theme="dark"] .ant-picker-dropdown .ant-picker-cell {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .ant-picker-dropdown .ant-picker-cell:hover .ant-picker-cell-inner {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Style dla trybu ciemnego dla predefiniowanych zakresów dat */
+[data-theme="dark"] .date-preset-button {
+  color: var(--primary-color);
+}
+
+[data-theme="dark"] .date-preset-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Style dla trybu ciemnego dla wykrytej daty w tytule */
+[data-theme="dark"] .detected-date-info {
+  background-color: rgba(var(--primary-color-rgb), 0.2);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
-  .task-form-container {
-    padding: var(--spacing-sm);
+  .form-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+  }
+  
+  .priority-dropdown-container {
+    width: 100%;
+  }
+  
+  .date-picker {
+    width: 100%;
   }
   
   .form-actions {
@@ -64,6 +391,14 @@
   }
   
   .form-actions button {
+    width: 100%;
+  }
+  
+  .multiline-dialog-actions {
+    flex-direction: column;
+  }
+  
+  .multiline-dialog-actions button {
     width: 100%;
   }
 }

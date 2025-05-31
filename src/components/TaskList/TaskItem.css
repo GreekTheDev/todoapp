@@ -6,6 +6,7 @@
   margin-bottom: var(--spacing-md);
   transition: box-shadow var(--transition-fast), transform var(--transition-fast);
   border: 1px solid rgba(0, 0, 0, 0.05);
+  min-height: 80px; /* Dodajemy minimalną wysokość, aby zapobiec zwijaniu */
 }
 
 .task-item:hover {
@@ -18,10 +19,28 @@
   border-left: 4px solid var(--success-color);
 }
 
+/* Styl dla zadania w trybie edycji */
+.task-item.is-editing {
+  min-height: 80px;
+  height: auto;
+  opacity: 0.95;
+  transform: none !important;
+  box-shadow: var(--shadow-md) !important;
+  position: relative;
+  z-index: 1;
+  transition: none !important;
+  border-left: 4px solid var(--primary-color) !important;
+}
+
+/* Dodatkowy styl dla trybu ciemnego */
+[data-theme="dark"] .task-item.is-editing {
+  opacity: 0.95;
+}
+
 .task-item-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   margin-bottom: var(--spacing-sm);
 }
 
@@ -29,6 +48,7 @@
   display: flex;
   gap: var(--spacing-sm);
   flex: 1;
+  align-items: center;
 }
 
 .task-checkbox-container {
@@ -36,7 +56,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 4px;
 }
 
 .task-checkbox {
@@ -80,11 +99,43 @@
 }
 
 .task-title {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: 500;
   margin-bottom: var(--spacing-xs);
   color: var(--text-primary);
   transition: color var(--transition-fast), text-decoration var(--transition-fast);
+}
+
+.task-priority {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: var(--border-radius-sm);
+  text-align: center;
+  margin-right: 4px;
+}
+
+.task-priority.low {
+  background-color: rgba(76, 175, 80, 0.1);
+  color: #4CAF50;
+}
+
+.task-priority.medium {
+  background-color: rgba(255, 152, 0, 0.1);
+  color: #FF9800;
+}
+
+.task-priority.high {
+  background-color: rgba(244, 67, 54, 0.1);
+  color: #F44336;
+}
+
+.priority-label.none {
+  color: var(--text-secondary);
+}
+
+.edit-priority {
+  margin-bottom: var(--spacing-sm);
 }
 
 .task-item.completed .task-title {
@@ -102,7 +153,73 @@
 .task-item-actions {
   display: flex;
   align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.task-action-buttons {
+  display: flex;
   gap: var(--spacing-xs);
+}
+
+/* Style dla przycisków edycji, przenoszenia i usuwania na wersji desktopowej */
+@media (min-width: 769px) {
+  .task-action-buttons button[aria-label="Edytuj zadanie"],
+  .task-action-buttons button[aria-label="Przenieś zadanie do innego projektu"],
+  .task-action-buttons button[aria-label="Usuń zadanie"] {
+    width: 38px;
+    height: 38px;
+    transition: all 0.2s ease;
+  }
+
+  .task-action-buttons button[aria-label="Edytuj zadanie"] svg,
+  .task-action-buttons button[aria-label="Przenieś zadanie do innego projektu"] svg,
+  .task-action-buttons button[aria-label="Usuń zadanie"] svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .task-action-buttons button[aria-label="Edytuj zadanie"]:hover {
+    background-color: rgba(74, 111, 165, 0.1); /* --primary-color z opacity */
+    color: var(--primary-color);
+  }
+  
+  .task-action-buttons button[aria-label="Przenieś zadanie do innego projektu"]:hover {
+    background-color: rgba(42, 157, 143, 0.1); /* --success-color z opacity */
+    color: var(--success-color);
+  }
+  
+  .task-action-buttons button[aria-label="Usuń zadanie"]:hover {
+    background-color: rgba(230, 57, 70, 0.1); /* --error-color z opacity */
+  }
+}
+
+.mobile-add-button {
+  display: none;
+}
+
+/* Powiększenie ikony "+" w przycisku mobilnym */
+@media (max-width: 768px) {
+  .mobile-add-button svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.desktop-add-button {
+  display: flex;
+}
+
+/* Powiększenie ikony "+" w przycisku desktopowym */
+@media (min-width: 769px) {
+  .desktop-add-button svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .desktop-add-button:hover {
+    background-color: rgba(74, 111, 165, 0.1); /* --primary-color z opacity */
+    color: var(--primary-color);
+  }
 }
 
 .delete-icon {
@@ -115,7 +232,6 @@
   background-color: var(--accent-color);
   padding: 2px 8px;
   border-radius: var(--border-radius-sm);
-  margin-right: var(--spacing-sm);
 }
 
 .task-item-footer {
@@ -152,36 +268,331 @@
 
 .add-subtask-form {
   display: flex;
+  flex-direction: column;
   gap: var(--spacing-sm);
   margin-top: var(--spacing-sm);
   margin-bottom: var(--spacing-sm);
 }
 
+.subtask-form-inputs {
+  width: 100%;
+}
+
 .add-subtask-input {
-  flex: 1;
+  width: 100%;
   padding: var(--spacing-xs) var(--spacing-sm);
-  border: 1px solid var(--text-secondary);
-  border-radius: var(--border-radius-sm);
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0;
   font-size: 0.9rem;
+  background-color: transparent;
+  transition: border-color var(--transition-fast);
+}
+
+.add-subtask-input:focus {
+  border-bottom-color: var(--primary-color);
+  outline: none;
+}
+
+.subtask-form-row {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+  margin-top: var(--spacing-xs);
+}
+
+/* Dropdown priorytetu */
+.priority-dropdown-container {
+  position: relative;
+  width: 160px;
+}
+
+.priority-dropdown-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 36px;
+  padding: 0 var(--spacing-sm);
+  background-color: var(--surface-color);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: var(--border-radius-md);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.priority-dropdown-button:hover {
+  border-color: var(--primary-color);
+}
+
+.dropdown-icon {
+  color: var(--text-secondary);
+}
+
+.priority-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 100%;
+  background-color: var(--surface-color);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-md);
+  z-index: 10;
+  overflow: hidden;
+}
+
+.priority-dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-sm);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.priority-dropdown-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.priority-icon {
+  display: inline-block;
+  width: 24px;
+  text-align: center;
+  transform: rotate(270deg);
+}
+
+.priority-name {
+  flex: 1;
+}
+
+/* Kolory priorytetów */
+.priority-dropdown-item.low .priority-icon,
+.priority-value.low .priority-icon {
+  color: var(--primary-color);
+}
+
+.priority-dropdown-item.medium .priority-icon,
+.priority-value.medium .priority-icon {
+  color: #FF9800;
+}
+
+.priority-dropdown-item.high .priority-icon,
+.priority-value.high .priority-icon {
+  color: #F44336;
+}
+
+/* Przycisk usuwania priorytetu */
+.clear-priority-button {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0;
+  font-size: 1rem;
+}
+
+.priority-dropdown-button:hover .clear-priority-button {
+  display: flex;
+}
+
+.clear-priority-button:hover {
+  color: var(--error-color);
+}
+
+/* Style dla listy projektów */
+.move-task-container {
+  position: relative;
+}
+
+.move-task-button {
+  color: var(--text-secondary);
+}
+
+.projects-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  width: 220px;
+  background-color: var(--surface-color);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-md);
+  z-index: 10;
+  overflow: hidden;
+}
+
+.projects-dropdown-header {
+  padding: var(--spacing-sm);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.projects-dropdown-list {
+  max-height: 200px;
+  overflow-y: auto;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.project-dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-sm);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.project-dropdown-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.project-color {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: var(--spacing-sm);
+}
+
+.project-name {
+  font-size: 0.9rem;
+  color: var(--text-primary);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
+  .task-item {
+    position: relative;
+    padding: var(--spacing-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  /* Pierwsza linia: checkbox, tytuł i przyciski akcji */
   .task-item-header {
+    display: flex;
     flex-direction: column;
     gap: var(--spacing-sm);
   }
   
+  .task-item-main {
+    display: flex;
+    width: 100%;
+    align-items: center;
+  }
+  
+  .task-checkbox-container {
+    margin-right: 8px; /* Stały odstęp dla lepszego wyrównania */
+  }
+  
+  .task-content {
+    flex: 1;
+    min-width: 0; /* Zapobiega przepełnieniu */
+    padding-right: 110px; /* Miejsce na przyciski akcji */
+  }
+  
+  .task-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0;
+  }
+  
+  .task-description {
+    display: none; /* Ukryj opis w widoku mobilnym */
+  }
+  
+  /* Przenosimy przyciski akcji do pierwszej linii */
+  .task-action-buttons {
+    position: absolute;
+    top: calc(var(--spacing-md) + -6px); /* Dostosowanie pozycji w pionie, aby wyrównać z tytułem */
+    right: var(--spacing-md);
+    display: flex;
+    gap: 4px; /* Mniejszy odstęp między przyciskami */
+    background-color: var(--surface-color); /* Dodajemy tło, aby przyciski były dobrze widoczne */
+    padding: 2px;
+    border-radius: var(--border-radius-sm);
+  }
+  
+  .task-action-buttons button {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0; /* Usuwamy padding, aby przyciski były bardziej kompaktowe */
+  }
+  
+  .task-action-buttons svg {
+    width: 16px;
+    height: 16px;
+  }
+  
+  /* Dostosowanie listy projektów w widoku mobilnym */
+  .projects-dropdown {
+    right: auto;
+    left: 0;
+    width: 200px;
+  }
+  
+  /* Druga linia: priorytet i data */
   .task-item-actions {
-    margin-left: calc(18px + var(--spacing-sm));
-  }
-  
-  .task-item-footer {
-    flex-direction: column;
+    display: flex;
+    flex-direction: row;
+    align-items: start;
     gap: var(--spacing-sm);
+    margin-left: 28px; /* Wyrównanie z tytułem (checkbox + odstęp) */
+    margin-top: 8px; /* Mniejszy odstęp od tytułu */
+    margin-bottom: var(--spacing-sm);
+    margin-right: auto;
   }
   
-  .add-subtask-form {
+  .task-priority, .task-due-date {
+    font-size: 0.7rem;
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+  
+  /* Linia pozioma */
+  .task-item-footer {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start; /* Przycisk subtasks do lewej */
+    gap: var(--spacing-sm);
+    padding-top: var(--spacing-sm);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  
+  .subtask-form-inputs {
     flex-direction: column;
+  }
+  
+  .subtask-date-container {
+    width: 100%;
+  }
+  
+  .mobile-add-button {
+    display: flex;
+  }
+  
+  .desktop-add-button {
+    display: none;
+  }
+  
+  .subtasks-toggle-button {
+    margin-left: 0; /* Przycisk subtasks do lewej */
+    margin-right: auto;
+    justify-content: flex-start;
   }
 }

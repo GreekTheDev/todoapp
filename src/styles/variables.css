@@ -1,10 +1,15 @@
 :root {
   /* Color Palette */
   --primary-color: #4a6fa5;
+  --primary-color-rgb: 74, 111, 165;
   --secondary-color: #6fb3b8;
+  --secondary-color-rgb: 111, 179, 184;
   --accent-color: #badfe7;
+  --accent-color-rgb: 186, 223, 231;
   --background-color: #f6f6f6;
+  --background-color-rgb: 246, 246, 246;
   --surface-color: #ffffff;
+  --surface-color-rgb: 255, 255, 255;
   
   /* Functional Colors */
   --error-color: #e63946;
@@ -46,10 +51,15 @@
 /* Dark Mode Variables */
 [data-theme="dark"] {
   --primary-color: #5d8cd0;
+  --primary-color-rgb: 93, 140, 208;
   --secondary-color: #7ec4c9;
+  --secondary-color-rgb: 126, 196, 201;
   --accent-color: #c2e7ef;
+  --accent-color-rgb: 194, 231, 239;
   --background-color: #121212;
+  --background-color-rgb: 18, 18, 18;
   --surface-color: #1e1e1e;
+  --surface-color-rgb: 30, 30, 30;
   
   /* Text Colors */
   --text-primary: #f0f0f0;

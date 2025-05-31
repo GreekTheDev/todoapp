@@ -2,33 +2,9 @@ import React, { useContext, useState } from 'react';
 import { TaskContext, PROJECT_COLORS } from '../../context/TaskContext';
 import { ThemeContext } from '../../context/ThemeContext';
 import Button from '../UI/Button';
+import DeleteProjectModal from './DeleteProjectModal';
 import { FiUser, FiSettings, FiMoon, FiSun, FiPlus, FiChevronLeft, FiMenu } from 'react-icons/fi';
 import './Sidebar.css';
-
-// Dostępne ikony dla projektów
-const PROJECT_ICONS = [
-  { value: '/images/icons/folder.svg', label: 'Folder' },
-  { value: '/images/icons/briefcase.svg', label: 'Teczka' },
-  { value: '/images/icons/calendar.svg', label: 'Kalendarz' },
-  { value: '/images/icons/book.svg', label: 'Książka' },
-  { value: '/images/icons/star.svg', label: 'Gwiazda' },
-  { value: '/images/icons/heart.svg', label: 'Serce' },
-  { value: '/images/icons/flag.svg', label: 'Flaga' },
-  { value: '/images/icons/target.svg', label: 'Cel' },
-  { value: '/images/icons/home.svg', label: 'Dom' },
-  { value: '/images/icons/coffee.svg', label: 'Kawa' },
-  { value: '/images/icons/code.svg', label: 'Kod' },
-  { value: '/images/icons/file-text.svg', label: 'Dokument' },
-  { value: '/images/icons/shopping-cart.svg', label: 'Zakupy' },
-  { value: '/images/icons/gift.svg', label: 'Prezent' },
-  { value: '/images/icons/map.svg', label: 'Mapa' },
-  { value: '/images/icons/music.svg', label: 'Muzyka' },
-  { value: '/images/icons/film.svg', label: 'Film' },
-  { value: '/images/icons/users.svg', label: 'Użytkownicy' },
-  { value: '/images/icons/zap.svg', label: 'Błyskawica' },
-  { value: '/images/icons/award.svg', label: 'Nagroda' },
-  { value: '/images/icons/bookmark.svg', label: 'Zakładka' }
-];
 
 const Sidebar = ({ isCollapsed, setIsCollapsed, isMobile }) => {
   const { 
@@ -36,20 +12,30 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, isMobile }) => {
     activeProject, 
     setActiveProject, 
     addProject, 
-    deleteProject 
+    deleteProject,
+    tasks
   } = useContext(TaskContext);
   
   const { darkMode, toggleTheme } = useContext(ThemeContext);
   const [newProjectName, setNewProjectName] = useState('');
   const [showAddProject, setShowAddProject] = useState(false);
-  const [projectIconType, setProjectIconType] = useState('color');
-  const [projectIconColor, setProjectIconColor] = useState(PROJECT_COLORS[0]);
-  const [projectIconImage, setProjectIconImage] = useState(PROJECT_ICONS[0].value);
+  const [projectColor, setProjectColor] = useState(PROJECT_COLORS[0]);
+  const [showColorPicker, setShowColorPicker] = useState(false);
+  const [animateAddButton, setAnimateAddButton] = useState(false);
+  const [wasAutoExpanded, setWasAutoExpanded] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [projectToDelete, setProjectToDelete] = useState(null);
   
   // Flaga do śledzenia, czy użytkownik ręcznie zwinął sidebar
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
+    
+    // Jeśli sidebar jest zwijany, ukryj formularz dodawania projektu
+    if (!isCollapsed) {
+      setShowAddProject(false);
+      setShowColorPicker(false);
+    }
   };
   
   // Funkcja do obsługi kliknięcia w logo na desktopie
@@ -58,25 +44,76 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, isMobile }) => {
       toggleSidebar();
     }
   };
+  
+  // Usunięto efekt automatycznego pokazywania formularza po rozwinięciu sidebara
+  
+  // Efekt do obsługi klawisza Escape
+  React.useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && showAddProject) {
+        setShowAddProject(false);
+        setShowColorPicker(false);
+        
+        // Jeśli panel został automatycznie rozwinięty, zwiń go z powrotem
+        if (wasAutoExpanded) {
+          setTimeout(() => {
+            setIsCollapsed(true);
+            setWasAutoExpanded(false);
+          }, 300);
+        }
+      }
+    };
+    
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [showAddProject, wasAutoExpanded, setIsCollapsed]);
 
   const handleAddProject = (e) => {
     e.preventDefault();
     if (newProjectName.trim()) {
-      const iconValue = projectIconType === 'color' ? projectIconColor : projectIconImage;
-      addProject(newProjectName, null, projectIconType, iconValue);
+      addProject(newProjectName, null, 'color', projectColor);
       setNewProjectName('');
       setShowAddProject(false);
+      setShowColorPicker(false);
+      setWasAutoExpanded(false); // Resetuj flagę po dodaniu projektu
       // Resetuj wartości do domyślnych
-      setProjectIconType('color');
-      setProjectIconColor(PROJECT_COLORS[0]);
-      setProjectIconImage(PROJECT_ICONS[0].value);
+      setProjectColor(PROJECT_COLORS[0]);
     }
+  };
+  
+  const handleColorClick = () => {
+    setShowColorPicker(!showColorPicker);
+  };
+  
+  const handleColorSelect = (color) => {
+    setProjectColor(color);
+    setShowColorPicker(false);
   };
 
   const handleDeleteProject = (e, projectId) => {
     e.stopPropagation();
-    if (window.confirm('Czy na pewno chcesz usunąć ten projekt?')) {
-      deleteProject(projectId);
+    const project = projects.find(p => p.id === projectId);
+    if (project) {
+      setProjectToDelete(project);
+      setShowDeleteModal(true);
+    }
+  };
+  
+  const confirmDeleteProject = () => {
+    if (projectToDelete) {
+      deleteProject(projectToDelete.id);
+      setProjectToDelete(null);
+    }
+  };
+  
+  // Funkcja zliczająca zadania w projekcie
+  const countTasksInProject = (projectId) => {
+    if (projectId === 'all') {
+      return tasks.length;
+    } else if (projectId === 'completed') {
+      return tasks.filter(task => task.completed).length;
+    } else {
+      return tasks.filter(task => task.projectId === projectId).length;
     }
   };
 
@@ -84,12 +121,20 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, isMobile }) => {
   React.useEffect(() => {
     const completedProject = projects.find(p => p.id === 'completed');
     if (!completedProject) {
-      addProject('Ukończone zadania', 'completed', 'icon', '/images/icons/check-circle.svg');
+      addProject('Ukończone zadania', 'completed', 'color', '#06D6A0');
     }
   }, [projects, addProject]);
 
   return (
     <>
+      {/* Modal potwierdzenia usunięcia projektu */}
+      <DeleteProjectModal 
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={confirmDeleteProject}
+        projectName={projectToDelete?.name || ''}
+      />
+      
       {isMobile && (
         <button 
           className="sidebar-toggle mobile-toggle mobile-hamburger"
@@ -116,14 +161,6 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, isMobile }) => {
             style={{ cursor: isCollapsed && !isMobile ? 'pointer' : 'default' }}
           />
           <h1 className="app-title">DoDoToDo</h1>
-          <img 
-            src="https://s3.us-east-1.amazonaws.com/files-greekthedev.click/dodotodo-images/DoDoToDo+Logo+Tick.png" 
-            alt="Logo aplikacji DoDoToDo" 
-            className="app-logo-mobile" 
-            width="32"
-            height="32"
-            loading="eager"
-          />
         </div>
         
         {!isMobile && !isCollapsed && (
@@ -135,8 +172,6 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, isMobile }) => {
             <FiChevronLeft />
           </button>
         )}
-        
-        {/* Przycisk hamburger został przeniesiony poza sidebar */}
       </div>
 
       
@@ -152,16 +187,12 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, isMobile }) => {
                 className={`sidebar-item ${activeProject === project.id ? 'active' : ''}`}
                 onClick={() => setActiveProject(project.id)}
               >
-                {project.icon && (
-                  <img 
-                    src={project.icon} 
-                    alt="" 
-                    className="sidebar-item-icon"
-                    width="20"
-                    height="20"
-                  />
-                )}
+                <span 
+                  className="sidebar-item-color" 
+                  style={{ backgroundColor: project.color || PROJECT_COLORS[0] }}
+                ></span>
                 <span className="sidebar-item-name">{project.name}</span>
+                <span className="sidebar-item-count">{countTasksInProject(project.id)}</span>
               </li>
             ))
           }
@@ -176,8 +207,27 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, isMobile }) => {
             <Button 
               variant="text" 
               size="small"
-              className="add-project-icon-button"
-              onClick={() => setShowAddProject(true)}
+              className={`add-project-icon-button ${animateAddButton ? 'animate-pulse' : ''}`}
+              onClick={() => {
+                // Rozwiń sidebar jeśli jest zwinięty
+                if (isCollapsed) {
+                  setIsCollapsed(false);
+                  setWasAutoExpanded(true); // Zapamiętaj, że panel został automatycznie rozwinięty
+                  // Animuj przycisk dodawania projektu
+                  setTimeout(() => {
+                    setAnimateAddButton(true);
+                    setTimeout(() => setAnimateAddButton(false), 600);
+                    // Opóźnij pokazanie formularza, aby sidebar zdążył się rozwinąć
+                    setShowAddProject(true);
+                  }, 300);
+                } else {
+                  setWasAutoExpanded(false); // Panel był już rozwinięty
+                  // Animuj przycisk dodawania projektu
+                  setAnimateAddButton(true);
+                  setTimeout(() => setAnimateAddButton(false), 600);
+                  setShowAddProject(true);
+                }
+              }}
               aria-label="Dodaj projekt"
             >
               <FiPlus />
@@ -187,19 +237,14 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, isMobile }) => {
           {showAddProject && (
             <form className="add-project-form" onSubmit={handleAddProject}>
               <div className="project-form-container">
-                <div className="project-icon-preview">
-                  {projectIconType === 'color' ? (
-                    <span 
-                      className="project-color-preview" 
-                      style={{ backgroundColor: projectIconColor }}
-                    ></span>
-                  ) : (
-                    <img 
-                      src={projectIconImage} 
-                      alt="" 
-                      className="project-icon-preview-img"
-                    />
-                  )}
+                <div 
+                  className="project-color-preview-container"
+                  onClick={handleColorClick}
+                >
+                  <span 
+                    className="project-color-preview" 
+                    style={{ backgroundColor: projectColor }}
+                  ></span>
                 </div>
                 
                 <input
@@ -212,78 +257,48 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, isMobile }) => {
                 />
               </div>
               
-              <div className="project-icon-selector">
-                <div className="icon-type-selector">
-                  <label className={`icon-type-option ${projectIconType === 'color' ? 'selected' : ''}`}>
-                    <input
-                      type="radio"
-                      name="iconType"
-                      value="color"
-                      checked={projectIconType === 'color'}
-                      onChange={() => setProjectIconType('color')}
+              {showColorPicker && (
+                <div className="color-picker">
+                  {PROJECT_COLORS.map((color, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      className={`color-option ${projectColor === color ? 'selected' : ''}`}
+                      style={{ backgroundColor: color }}
+                      onClick={() => handleColorSelect(color)}
+                      aria-label={`Kolor ${index + 1}`}
                     />
-                    <span>Kolor</span>
-                  </label>
-                  <label className={`icon-type-option ${projectIconType === 'icon' ? 'selected' : ''}`}>
-                    <input
-                      type="radio"
-                      name="iconType"
-                      value="icon"
-                      checked={projectIconType === 'icon'}
-                      onChange={() => setProjectIconType('icon')}
-                    />
-                    <span>Ikona</span>
-                  </label>
+                  ))}
                 </div>
-                
-                {projectIconType === 'color' ? (
-                  <div className="color-picker">
-                    {PROJECT_COLORS.map((color, index) => (
-                      <button
-                        key={index}
-                        type="button"
-                        className={`color-option ${projectIconColor === color ? 'selected' : ''}`}
-                        style={{ backgroundColor: color }}
-                        onClick={() => setProjectIconColor(color)}
-                        aria-label={`Kolor ${index + 1}`}
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="icon-picker">
-                    <div className="icon-grid">
-                      {PROJECT_ICONS.map((icon, index) => (
-                        <button
-                          key={index}
-                          type="button"
-                          className={`icon-option ${projectIconImage === icon.value ? 'selected' : ''}`}
-                          onClick={() => setProjectIconImage(icon.value)}
-                          aria-label={icon.label}
-                        >
-                          <img src={icon.value} alt={icon.label} />
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
+              )}
               
               <div className="add-project-actions">
-                <Button 
-                  type="button" 
-                  variant="text" 
-                  size="small"
-                  onClick={() => setShowAddProject(false)}
-                >
-                  Anuluj
-                </Button>
                 <Button 
                   type="submit" 
                   variant="primary" 
                   size="small"
+                  disabled={!newProjectName.trim()}
                 >
                   Dodaj
                 </Button>
+                <Button 
+                  type="button" 
+                  variant="text" 
+                  size="small"
+                  onClick={() => {
+                    setShowAddProject(false);
+                    // Jeśli panel został automatycznie rozwinięty, zwiń go z powrotem po anulowaniu
+                    if (wasAutoExpanded) {
+                      setTimeout(() => {
+                        setIsCollapsed(true);
+                        setWasAutoExpanded(false);
+                      }, 300); // Opóźnienie, aby formularz zdążył się schować
+                    }
+                  }}
+                >
+                  Anuluj
+                </Button>
+                
               </div>
             </form>
           )}
@@ -298,28 +313,21 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, isMobile }) => {
                     className={`sidebar-item ${activeProject === project.id ? 'active' : ''}`}
                     onClick={() => setActiveProject(project.id)}
                   >
-                    {project.icon ? (
-                      <img 
-                        src={project.icon} 
-                        alt="" 
-                        className="sidebar-item-icon"
-                        width="20"
-                        height="20"
-                      />
-                    ) : (
-                      <span 
-                        className="sidebar-item-color" 
-                        style={{ backgroundColor: project.color || PROJECT_COLORS[0] }}
-                      ></span>
-                    )}
+                    <span 
+                      className="sidebar-item-color" 
+                      style={{ backgroundColor: project.color || PROJECT_COLORS[0] }}
+                    ></span>
                     <span className="sidebar-item-name">{project.name}</span>
-                    <button 
-                      className="sidebar-item-delete"
-                      onClick={(e) => handleDeleteProject(e, project.id)}
-                      aria-label="Usuń projekt"
-                    >
-                      ×
-                    </button>
+                    <div className="sidebar-item-actions">
+                      <span className="sidebar-item-count">{countTasksInProject(project.id)}</span>
+                      <button 
+                        className="sidebar-item-delete"
+                        onClick={(e) => handleDeleteProject(e, project.id)}
+                        aria-label="Usuń projekt"
+                      >
+                        ×
+                      </button>
+                    </div>
                   </li>
                 ))
               }
@@ -338,16 +346,12 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, isMobile }) => {
                 className={`sidebar-item ${activeProject === project.id ? 'active' : ''}`}
                 onClick={() => setActiveProject(project.id)}
               >
-                {project.icon && (
-                  <img 
-                    src={project.icon} 
-                    alt="" 
-                    className="sidebar-item-icon"
-                    width="20"
-                    height="20"
-                  />
-                )}
+                <span 
+                  className="sidebar-item-color" 
+                  style={{ backgroundColor: project.color || PROJECT_COLORS[0] }}
+                ></span>
                 <span className="sidebar-item-name">{project.name}</span>
+                <span className="sidebar-item-count">{countTasksInProject(project.id)}</span>
               </li>
             ))
           }

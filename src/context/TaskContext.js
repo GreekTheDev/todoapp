@@ -33,9 +33,9 @@ export const TaskProvider = ({ children }) => {
     } else {
       // Set default projects if none exist
       const defaultProjects = [
-        { id: 'inbox', name: 'Skrzynka odbiorcza', icon: '/images/icons/inbox.svg', isDefault: true },
-        { id: 'all', name: 'Wszystkie zadania', icon: '/images/icons/list.svg', isDefault: true },
-        { id: 'completed', name: 'Ukończone zadania', icon: '/images/icons/check-circle.svg', isDefault: true }
+        { id: 'inbox', name: 'Skrzynka odbiorcza', color: '#4A6FA5', isDefault: true },
+        { id: 'all', name: 'Wszystkie zadania', color: '#2A9D8F', isDefault: true },
+        { id: 'completed', name: 'Ukończone zadania', color: '#06D6A0', isDefault: true }
       ];
       setProjects(defaultProjects);
       localStorage.setItem('projects', JSON.stringify(defaultProjects));
@@ -57,15 +57,15 @@ export const TaskProvider = ({ children }) => {
     
     // Dodaj brakujące domyślne projekty
     if (!hasInbox) {
-      updatedProjects.push({ id: 'inbox', name: 'Skrzynka odbiorcza', icon: '/images/icons/inbox.svg', isDefault: true });
+      updatedProjects.push({ id: 'inbox', name: 'Skrzynka odbiorcza', color: '#4A6FA5', isDefault: true });
     }
     
     if (!hasAll) {
-      updatedProjects.push({ id: 'all', name: 'Wszystkie zadania', icon: '/images/icons/list.svg', isDefault: true });
+      updatedProjects.push({ id: 'all', name: 'Wszystkie zadania', color: '#2A9D8F', isDefault: true });
     }
     
     if (!hasCompleted) {
-      updatedProjects.push({ id: 'completed', name: 'Ukończone zadania', icon: '/images/icons/check-circle.svg', isDefault: true });
+      updatedProjects.push({ id: 'completed', name: 'Ukończone zadania', color: '#06D6A0', isDefault: true });
     }
     
     // Jeśli dodano brakujące projekty, zaktualizuj stan
@@ -82,7 +82,8 @@ export const TaskProvider = ({ children }) => {
       ...task,
       id: Date.now().toString(),
       completed: false,
-      subtasks: [],
+      subtasks: task.subtasks || [],
+      priority: task.priority, // Może być null
       createdAt: new Date().toISOString()
     };
     setTasks([...tasks, newTask]);
@@ -134,8 +135,9 @@ export const TaskProvider = ({ children }) => {
       if (task.id === taskId) {
         const newSubtask = {
           id: Date.now().toString(),
-          title: subtask,
-          completed: false
+          title: subtask.title || subtask,
+          completed: false,
+          dueDate: subtask.dueDate || null
         };
         return {
           ...task,
@@ -225,16 +227,10 @@ export const TaskProvider = ({ children }) => {
     const newProject = {
       id: projectId,
       name: projectName,
-      isDefault: false
-    };
-    
-    // Dodaj ikonę lub kolor w zależności od wyboru użytkownika
-    if (iconType === 'icon' && iconValue) {
-      newProject.icon = iconValue;
-    } else {
+      isDefault: false,
       // Domyślny kolor, jeśli nie podano
-      newProject.color = iconValue || '#4A6FA5';
-    }
+      color: iconValue || '#4A6FA5'
+    };
     
     setProjects([...projects, newProject]);
   };

@@ -2,6 +2,8 @@
   padding: var(--spacing-md);
   max-width: 800px;
   margin: 0 auto;
+  position: relative;
+  padding-bottom: calc(var(--spacing-xl) * 2); /* Dodatkowy padding na dole dla przycisku */
 }
 
 .task-list-header {
@@ -31,10 +33,33 @@
   color: var(--text-secondary);
 }
 
+/* Styl dla przycisku dodawania zadania */
+.add-task-button-container {
+  position: fixed;
+  bottom: var(--spacing-lg);
+  right: var(--spacing-lg);
+  z-index: 10;
+}
+
+.add-task-button {
+  width: 60px;
+  height: 60px;
+  border-radius: 30%;
+  font-size: 2rem;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.add-task-button:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-lg);
+}
+
 /* Mobile styles */
 @media (max-width: 768px) {
   .task-list-container {
     padding: var(--spacing-sm);
+    padding-bottom: calc(var(--spacing-xl) * 2);
   }
   
   .task-list-header {
@@ -43,7 +68,13 @@
     gap: var(--spacing-sm);
   }
   
-  .task-list-header button {
-    width: 100%;
+  .add-task-button-container {
+    bottom: var(--spacing-md);
+    right: var(--spacing-md);
+  }
+  
+  .add-task-button {
+    width: 56px;
+    height: 56px;
   }
 }
