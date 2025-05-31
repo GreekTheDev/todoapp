@@ -124,8 +124,18 @@
 
 .color-themes-container {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   flex-wrap: wrap;
+  margin: 20px;
+  justify-content: space-around;
+}
+
+@media (max-width: 600px) {
+  .color-themes-container {
+    flex-direction: row;
+    align-items: center;
+    gap: 36px;
+  }
 }
 
 .color-theme-option {
@@ -189,6 +199,7 @@
 
 .toggle-switch input:checked + label {
   background-color: var(--primary-color);
+  height: 24px;
 }
 
 .toggle-switch input:checked + label:before {

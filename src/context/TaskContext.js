@@ -42,7 +42,7 @@ export const TaskProvider = ({ children }) => {
       setProjects(defaultProjects);
       localStorage.setItem('projects', JSON.stringify(defaultProjects));
     }
-  }, []);
+  }, [t]);
 
   // Save tasks and projects to localStorage whenever they change
   useEffect(() => {
@@ -101,7 +101,7 @@ export const TaskProvider = ({ children }) => {
     if (hasChanges) {
       setProjects(updatedProjects);
     }
-  }, [t]);
+  }, [t, projects]);
 
   // Task operations
   const addTask = (task) => {

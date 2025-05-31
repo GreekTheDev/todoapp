@@ -82,6 +82,10 @@ const deTranslations = {
   purple: 'Lila',
   red: 'Rot',
   orange: 'Orange',
+  yellow: 'Gelb',
+  gray: 'Grau',
+  pink: 'Rosa',
+  gold: 'Gold',
   
   // Nachrichten
   confirmDelete: 'Sind Sie sicher, dass Sie löschen möchten?',

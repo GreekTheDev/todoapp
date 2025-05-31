@@ -82,6 +82,10 @@ const frTranslations = {
   purple: 'Violet',
   red: 'Rouge',
   orange: 'Orange',
+  gray: 'Gris',
+  yellow: 'Jaune',
+  pink: 'Rose',
+  black: 'Noir',
   
   // Messages
   confirmDelete: 'Êtes-vous sûr de vouloir supprimer ?',

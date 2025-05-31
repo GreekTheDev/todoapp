@@ -90,6 +90,12 @@
   margin-left: var(--spacing-sm);
 }
 
+@media (max-width: 768px) {
+  .app-title {
+    margin-left: 5rem;
+  }
+}
+
 .collapsed .app-title {
   opacity: 0;
   transform: translateX(-20px);
@@ -178,6 +184,9 @@
 .sidebar-item-name {
   flex: 1;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
   transition: opacity var(--transition-normal);
 }
 
@@ -225,8 +234,8 @@
   padding: 0 var(--spacing-xs);
   opacity: 0;
   transition: opacity var(--transition-fast);
-  position: absolute;
-  right: var(--spacing-md);
+  margin-left: auto;
+  z-index: 2;
 }
 
 .sidebar-item:hover .sidebar-item-delete {

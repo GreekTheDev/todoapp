@@ -82,6 +82,10 @@ const enTranslations = {
   purple: 'Purple',
   red: 'Red',
   orange: 'Orange',
+  gray: 'Gray',
+  yellow: 'Yellow',
+  pink: 'Pink',
+  gold: 'Gold',
   
   // Messages
   confirmDelete: 'Are you sure you want to delete?',

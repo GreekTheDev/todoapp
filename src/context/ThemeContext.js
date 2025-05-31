@@ -13,7 +13,10 @@ export const ThemeProvider = ({ children }) => {
     { id: 'green', primary: '#2a9d8f', secondary: '#57cc99' },
     { id: 'purple', primary: '#8338ec', secondary: '#c77dff' },
     { id: 'red', primary: '#e63946', secondary: '#ff758f' },
-    { id: 'orange', primary: '#fb8500', secondary: '#ffb703' }
+    { id: 'orange', primary: '#fb8500', secondary: '#ffb703' },
+    { id: 'gray', primary: '#7d7d7d', secondary: '#b0b0b0' },
+    { id: 'pink', primary: '#ff69b4', secondary: '#ffb6c1' },
+    { id: 'gold', primary: '#ffd700', secondary: '#ffdf00' }
   ], []);
 
   useEffect(() => {

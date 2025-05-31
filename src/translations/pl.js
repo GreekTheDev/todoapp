@@ -31,7 +31,7 @@ const plTranslations = {
   deleteTask: 'Usuń zadanie',
   completeTask: 'Oznacz jako wykonane',
   incompleteTask: 'Oznacz jako niewykonane',
-  taskCompleted: 'Zadanie wykonane',
+  taskCompleted: 'Ukończone zadania',
   taskIncomplete: 'Zadanie niewykonane',
   noTasks: 'Brak zadań',
   newTask: 'Nowe zadanie',
@@ -82,6 +82,10 @@ const plTranslations = {
   purple: 'Fioletowy',
   red: 'Czerwony',
   orange: 'Pomarańczowy',
+  gray: 'Szary',
+  yellow: 'Żółty',
+  pink: 'Różowy',
+  gold: 'Złoty',
   
   // Komunikaty
   confirmDelete: 'Czy na pewno chcesz usunąć?',
@@ -91,7 +95,7 @@ const plTranslations = {
   taskDeleted: 'Zadanie zostało usunięte',
   projectAdded: 'Projekt został dodany',
   projectUpdated: 'Projekt został zaktualizowany',
-  projectDeleted: 'Projekt został usunięty',
+  projectDeleted: 'Projekt zostanie usunięty',
   
   // Opisy
   languageDescription: 'Zmiana języka wpłynie na wszystkie teksty w aplikacji.',
@@ -105,7 +109,7 @@ const plTranslations = {
   cancelButton: 'Anuluj',
   
   // Domyślne projekty
-  inbox: 'Skrzynka odbiorcza',
+  inbox: 'Skrzynka',
   allTasks: 'Wszystkie zadania',
   
   // Profil

@@ -80,7 +80,9 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, isMobile }) => {
   const handleAddProject = (e) => {
     e.preventDefault();
     if (newProjectName.trim()) {
-      addProject(newProjectName, null, 'color', projectColor);
+      // Ograniczenie długości tytułu projektu do 20 znaków
+      const trimmedName = newProjectName.trim().slice(0, 20);
+      addProject(trimmedName, null, 'color', projectColor);
       setNewProjectName('');
       setShowAddProject(false);
       setShowColorPicker(false);
@@ -273,6 +275,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, isMobile }) => {
                   value={newProjectName}
                   onChange={(e) => setNewProjectName(e.target.value)}
                   placeholder={t('projectName')}
+                  maxLength={20}
                   autoFocus
                   className="project-name-input"
                 />
