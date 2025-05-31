@@ -1,8 +1,12 @@
 import React, { useContext, useState } from 'react';
 import { TaskContext, PROJECT_COLORS } from '../../context/TaskContext';
 import { ThemeContext } from '../../context/ThemeContext';
+import { UserContext } from '../../context/UserContext';
+import { LanguageContext } from '../../context/LanguageContext';
 import Button from '../UI/Button';
 import DeleteProjectModal from './DeleteProjectModal';
+import ProfileModal from '../Profile/ProfileModal';
+import SettingsModal from '../Settings/SettingsModal';
 import { FiUser, FiSettings, FiMoon, FiSun, FiPlus, FiChevronLeft, FiMenu } from 'react-icons/fi';
 import './Sidebar.css';
 
@@ -17,6 +21,9 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, isMobile }) => {
   } = useContext(TaskContext);
   
   const { darkMode, toggleTheme } = useContext(ThemeContext);
+  const { isAuthenticated } = useContext(UserContext);
+  const { t } = useContext(LanguageContext);
+  
   const [newProjectName, setNewProjectName] = useState('');
   const [showAddProject, setShowAddProject] = useState(false);
   const [projectColor, setProjectColor] = useState(PROJECT_COLORS[0]);
@@ -25,6 +32,8 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, isMobile }) => {
   const [wasAutoExpanded, setWasAutoExpanded] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [projectToDelete, setProjectToDelete] = useState(null);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
   
   // Flaga do śledzenia, czy użytkownik ręcznie zwinął sidebar
 
@@ -121,9 +130,9 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, isMobile }) => {
   React.useEffect(() => {
     const completedProject = projects.find(p => p.id === 'completed');
     if (!completedProject) {
-      addProject('Ukończone zadania', 'completed', 'color', '#06D6A0');
+      addProject(t('taskCompleted'), 'completed', 'color', '#06D6A0');
     }
-  }, [projects, addProject]);
+  }, [projects, addProject, t]);
 
   return (
     <>
@@ -135,11 +144,23 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, isMobile }) => {
         projectName={projectToDelete?.name || ''}
       />
       
+      {/* Modal profilu użytkownika */}
+      <ProfileModal 
+        isOpen={showProfileModal}
+        onClose={() => setShowProfileModal(false)}
+      />
+      
+      {/* Modal ustawień */}
+      <SettingsModal 
+        isOpen={showSettingsModal}
+        onClose={() => setShowSettingsModal(false)}
+      />
+      
       {isMobile && (
         <button 
           className="sidebar-toggle mobile-toggle mobile-hamburger"
           onClick={toggleSidebar}
-          aria-label={isCollapsed ? "Rozwiń sidebar" : "Zwiń sidebar"}
+          aria-label={isCollapsed ? t("expand") : t("collapse")}
         >
           {isCollapsed ? <FiMenu /> : <FiChevronLeft />}
         </button>
@@ -167,7 +188,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, isMobile }) => {
           <button 
             className="sidebar-toggle desktop-toggle"
             onClick={toggleSidebar}
-            aria-label="Zwiń sidebar"
+            aria-label={t("collapse")}
           >
             <FiChevronLeft />
           </button>
@@ -203,7 +224,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, isMobile }) => {
         {/* Projekty użytkownika */}
         <div className="sidebar-section projects-section">
           <div className="sidebar-section-header">
-            <h2 className="sidebar-section-title">Projekty</h2>
+            <h2 className="sidebar-section-title">{t('projects')}</h2>
             <Button 
               variant="text" 
               size="small"
@@ -228,7 +249,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, isMobile }) => {
                   setShowAddProject(true);
                 }
               }}
-              aria-label="Dodaj projekt"
+              aria-label={t('addProject')}
             >
               <FiPlus />
             </Button>
@@ -251,7 +272,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, isMobile }) => {
                   type="text"
                   value={newProjectName}
                   onChange={(e) => setNewProjectName(e.target.value)}
-                  placeholder="Nazwa projektu"
+                  placeholder={t('projectName')}
                   autoFocus
                   className="project-name-input"
                 />
@@ -279,7 +300,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, isMobile }) => {
                   size="small"
                   disabled={!newProjectName.trim()}
                 >
-                  Dodaj
+                  {t('addProjectButton')}
                 </Button>
                 <Button 
                   type="button" 
@@ -296,7 +317,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, isMobile }) => {
                     }
                   }}
                 >
-                  Anuluj
+                  {t('cancelButton')}
                 </Button>
                 
               </div>
@@ -323,7 +344,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, isMobile }) => {
                       <button 
                         className="sidebar-item-delete"
                         onClick={(e) => handleDeleteProject(e, project.id)}
-                        aria-label="Usuń projekt"
+                        aria-label={t('deleteProject')}
                       >
                         ×
                       </button>
@@ -371,9 +392,11 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, isMobile }) => {
             variant="icon" 
             size="small"
             className="sidebar-footer-button"
-            aria-label="Profil"
+            onClick={() => setShowProfileModal(true)}
+            aria-label={t('profile')}
           >
             <FiUser />
+            {isAuthenticated && <span className="profile-indicator"></span>}
           </Button>
           
           <Button 
@@ -381,7 +404,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, isMobile }) => {
             size="small"
             className="sidebar-footer-button"
             onClick={toggleTheme}
-            aria-label={darkMode ? 'Tryb jasny' : 'Tryb ciemny'}
+            aria-label={darkMode ? t('lightMode') : t('darkMode')}
           >
             {darkMode ? <FiSun /> : <FiMoon />}
           </Button>
@@ -390,7 +413,8 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, isMobile }) => {
             variant="icon" 
             size="small"
             className="sidebar-footer-button"
-            aria-label="Ustawienia"
+            onClick={() => setShowSettingsModal(true)}
+            aria-label={t('settings')}
           >
             <FiSettings />
           </Button>

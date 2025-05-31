@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { TaskContext } from '../../context/TaskContext';
+import { LanguageContext } from '../../context/LanguageContext';
 import TaskItem from './TaskItem';
 import TaskForm from './TaskForm';
 import Button from '../UI/Button';
@@ -11,6 +12,7 @@ const TaskList = () => {
     getTasksByProject, 
     projects 
   } = useContext(TaskContext);
+  const { t } = useContext(LanguageContext);
   
   const [showAddTask, setShowAddTask] = useState(false);
   
@@ -44,9 +46,9 @@ const TaskList = () => {
         {tasks.length === 0 ? (
           <div className="empty-state">
             {activeProject === 'completed' ? (
-              <p>Wszystko ukończone!</p>
+              <p>{t('allCompleted')}</p>
             ) : (
-              <p>Brak zadań. Dodaj nowe zadanie, aby rozpocząć.</p>
+              <p>{t('noTasksDescription')}</p>
             )}
           </div>
         ) : (
@@ -64,7 +66,7 @@ const TaskList = () => {
             size="large"
             className="add-task-button"
             onClick={() => setShowAddTask(true)}
-            aria-label="Dodaj nowe zadanie"
+            aria-label={t('addTask')}
           >
             +
           </Button>

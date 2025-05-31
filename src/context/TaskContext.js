@@ -1,4 +1,5 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
+import { LanguageContext } from './LanguageContext';
 
 export const TaskContext = createContext();
 
@@ -15,6 +16,7 @@ export const PROJECT_COLORS = [
 ];
 
 export const TaskProvider = ({ children }) => {
+  const { t } = useContext(LanguageContext);
   const [tasks, setTasks] = useState([]);
   const [projects, setProjects] = useState([]);
   const [activeProject, setActiveProject] = useState('inbox');
@@ -33,9 +35,9 @@ export const TaskProvider = ({ children }) => {
     } else {
       // Set default projects if none exist
       const defaultProjects = [
-        { id: 'inbox', name: 'Skrzynka odbiorcza', color: '#4A6FA5', isDefault: true },
-        { id: 'all', name: 'Wszystkie zadania', color: '#2A9D8F', isDefault: true },
-        { id: 'completed', name: 'Ukończone zadania', color: '#06D6A0', isDefault: true }
+        { id: 'inbox', name: t('inbox'), color: '#4A6FA5', isDefault: true },
+        { id: 'all', name: t('allTasks'), color: '#2A9D8F', isDefault: true },
+        { id: 'completed', name: t('taskCompleted'), color: '#06D6A0', isDefault: true }
       ];
       setProjects(defaultProjects);
       localStorage.setItem('projects', JSON.stringify(defaultProjects));
@@ -57,15 +59,15 @@ export const TaskProvider = ({ children }) => {
     
     // Dodaj brakujące domyślne projekty
     if (!hasInbox) {
-      updatedProjects.push({ id: 'inbox', name: 'Skrzynka odbiorcza', color: '#4A6FA5', isDefault: true });
+      updatedProjects.push({ id: 'inbox', name: t('inbox'), color: '#4A6FA5', isDefault: true });
     }
     
     if (!hasAll) {
-      updatedProjects.push({ id: 'all', name: 'Wszystkie zadania', color: '#2A9D8F', isDefault: true });
+      updatedProjects.push({ id: 'all', name: t('allTasks'), color: '#2A9D8F', isDefault: true });
     }
     
     if (!hasCompleted) {
-      updatedProjects.push({ id: 'completed', name: 'Ukończone zadania', color: '#06D6A0', isDefault: true });
+      updatedProjects.push({ id: 'completed', name: t('taskCompleted'), color: '#06D6A0', isDefault: true });
     }
     
     // Jeśli dodano brakujące projekty, zaktualizuj stan
@@ -74,7 +76,32 @@ export const TaskProvider = ({ children }) => {
     } else {
       localStorage.setItem('projects', JSON.stringify(projects));
     }
-  }, [projects]);
+  }, [projects, t]);
+
+  // Aktualizuj nazwy domyślnych projektów przy zmianie języka
+  useEffect(() => {
+    const updatedProjects = projects.map(project => {
+      if (project.isDefault) {
+        if (project.id === 'inbox') {
+          return { ...project, name: t('inbox') };
+        } else if (project.id === 'all') {
+          return { ...project, name: t('allTasks') };
+        } else if (project.id === 'completed') {
+          return { ...project, name: t('taskCompleted') };
+        }
+      }
+      return project;
+    });
+    
+    // Sprawdź, czy coś się zmieniło
+    const hasChanges = updatedProjects.some((project, index) => 
+      project.name !== projects[index]?.name
+    );
+    
+    if (hasChanges) {
+      setProjects(updatedProjects);
+    }
+  }, [t]);
 
   // Task operations
   const addTask = (task) => {

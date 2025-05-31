@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&family=Oswald:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&family=Lato:wght@300;400;700&family=Raleway:wght@300;400;500;600;700&family=Nunito:wght@300;400;600;700&family=Playfair+Display:wght@400;500;600;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap');
 @import './variables.css';
 
 * {
@@ -8,14 +8,14 @@
 }
 
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-family);
   background-color: var(--background-color);
   color: var(--text-primary);
-  transition: background-color var(--transition-normal), color var(--transition-normal);
+  transition: background-color var(--transition-normal), color var(--transition-normal), font-family var(--transition-normal);
 }
 
 button {
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-family);
   cursor: pointer;
   border: none;
   outline: none;
@@ -26,7 +26,7 @@ button {
 }
 
 input, textarea, select {
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-family);
   font-size: 1rem;
   padding: var(--spacing-sm) var(--spacing-md);
   border: 1px solid var(--text-secondary);

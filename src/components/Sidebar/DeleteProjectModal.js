@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { LanguageContext } from '../../context/LanguageContext';
 import Modal from '../UI/Modal';
 import Button from '../UI/Button';
 import './DeleteProjectModal.css';
 
 const DeleteProjectModal = ({ isOpen, onClose, onConfirm, projectName }) => {
+  const { t } = useContext(LanguageContext);
+  
   const handleConfirm = () => {
     onConfirm();
     onClose();
@@ -22,23 +25,23 @@ const DeleteProjectModal = ({ isOpen, onClose, onConfirm, projectName }) => {
             variant="error" 
             onClick={handleConfirm}
           >
-            Usuń
+            {t('delete')}
           </Button>
           <Button 
             variant="text" 
             onClick={onClose}
           >
-            Anuluj
+            {t('cancel')}
           </Button>
         </>
       }
     >
       <div className="delete-project-content">
         <p className="delete-project-message">
-          Usunąć projekt <span className="delete-project-title">{projectName}</span>?
+          {t('confirmDelete')} <span className="delete-project-title">{projectName}</span>?
         </p>
         <p className="delete-project-warning">
-          Zadania w projekcie zostaną usunięte.
+          {t('projectDeleted')}
         </p>
       </div>
     </Modal>

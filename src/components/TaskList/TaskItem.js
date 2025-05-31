@@ -1,5 +1,6 @@
 import React, { useContext, useState, useRef, useEffect } from 'react';
 import { TaskContext } from '../../context/TaskContext';
+import { LanguageContext } from '../../context/LanguageContext';
 import Button from '../UI/Button';
 import SubtaskList from './SubtaskList';
 import TaskForm from './TaskForm';
@@ -17,6 +18,7 @@ const TaskItem = ({ task }) => {
     addSubtask,
     projects
   } = useContext(TaskContext);
+  const { t } = useContext(LanguageContext);
   
   const [isEditing, setIsEditing] = useState(false);
   const [showSubtasks, setShowSubtasks] = useState(false);
@@ -106,7 +108,7 @@ const TaskItem = ({ task }) => {
   
   // Funkcja pomocnicza do renderowania etykiety priorytetu
   const getPriorityLabel = () => {
-    if (!subtaskPriority) return 'Priorytet';
+    if (!subtaskPriority) return t('priority');
     
     const priorityIcons = {
       low: '❯',
@@ -115,9 +117,9 @@ const TaskItem = ({ task }) => {
     };
     
     const priorityNames = {
-      low: 'Niski',
-      medium: 'Średni',
-      high: 'Wysoki'
+      low: t('priorityLow'),
+      medium: t('priorityMedium'),
+      high: t('priorityHigh')
     };
     
     return (
@@ -174,9 +176,9 @@ const TaskItem = ({ task }) => {
           <div className="task-item-actions">
             {task.priority && (
               <span className={`task-priority ${task.priority}`}>
-                {task.priority === 'low' && 'Niski'}
-                {task.priority === 'medium' && 'Średni'}
-                {task.priority === 'high' && 'Wysoki'}
+                {task.priority === 'low' && t('priorityLow')}
+                {task.priority === 'medium' && t('priorityMedium')}
+                {task.priority === 'high' && t('priorityHigh')}
               </span>
             )}
             {formattedDate && (
@@ -189,7 +191,7 @@ const TaskItem = ({ task }) => {
                 variant="icon" 
                 size="small" 
                 onClick={() => setShowAddSubtask(!showAddSubtask)}
-                aria-label={showAddSubtask ? 'Anuluj' : 'Dodaj podzadanie'}
+                aria-label={showAddSubtask ? t('cancelAddSubtask') : t('addSubtask')}
                 className="mobile-add-button"
               >
                 <FiPlus />
@@ -198,7 +200,7 @@ const TaskItem = ({ task }) => {
                 variant="icon" 
                 size="small" 
                 onClick={handleEdit}
-                aria-label="Edytuj zadanie"
+                aria-label={t('editTaskLabel')}
               >
                 <FiEdit2 />
               </Button>
@@ -207,7 +209,7 @@ const TaskItem = ({ task }) => {
                   variant="icon" 
                   size="small" 
                   onClick={() => setShowProjectsList(!showProjectsList)}
-                  aria-label="Przenieś zadanie do innego projektu"
+                  aria-label={t('moveTask')}
                   className="move-task-button"
                 >
                   <FiArrowRight />
@@ -215,7 +217,7 @@ const TaskItem = ({ task }) => {
                 {showProjectsList && (
                   <div className="projects-dropdown">
                     <div className="projects-dropdown-header">
-                      <span>Przenieś do projektu:</span>
+                      <span>{t('moveToProject')}:</span>
                     </div>
                     <ul className="projects-dropdown-list">
                       {projects
@@ -246,7 +248,7 @@ const TaskItem = ({ task }) => {
                 variant="icon" 
                 size="small" 
                 onClick={handleDelete}
-                aria-label="Usuń zadanie"
+                aria-label={t('deleteTaskLabel')}
                 className="delete-icon"
               >
                 <FiTrash2 />

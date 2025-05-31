@@ -1,0 +1,297 @@
+.settings-modal {
+  max-width: 800px;
+  width: 90%;
+  max-height: 90vh;
+}
+
+.settings-container {
+  display: flex;
+  height: 100%;
+}
+
+.settings-sidebar {
+  width: 200px;
+  border-right: 1px solid var(--border-color);
+  padding: 1.5rem 0;
+  flex-shrink: 0;
+}
+
+.settings-content {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.settings-title {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.settings-tab {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  background: none;
+  border: none;
+  text-align: left;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border-left: 3px solid transparent;
+}
+
+.settings-tab:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--text-primary);
+}
+
+.settings-tab.active {
+  color: var(--primary-color);
+  background-color: rgba(74, 111, 165, 0.1);
+  border-left-color: var(--primary-color);
+}
+
+.settings-tab-icon {
+  margin-right: 0.75rem;
+  font-size: 1.1rem;
+}
+
+.settings-section {
+  margin-bottom: 2rem;
+}
+
+.settings-section-title {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+  font-weight: 500;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.settings-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0.5rem 0;
+}
+
+.settings-option label {
+  color: var(--text-primary);
+  font-weight: 400;
+}
+
+.settings-option select,
+.settings-option input[type="number"] {
+  width: 200px;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  background-color: var(--bg-input);
+  color: var(--text-primary);
+  font-family: var(--font-family);
+}
+
+/* Style dla selektora czcionek */
+.font-select {
+  width: 220px !important;
+  height: auto;
+  padding: 0.75rem 0.5rem !important;
+}
+
+.font-option {
+  padding: 8px;
+  font-size: 1rem;
+}
+
+/* Style dla selektora języka */
+.language-select {
+  width: 220px !important;
+  padding: 0.75rem 0.5rem !important;
+}
+
+.settings-option input[type="number"] {
+  width: 80px;
+  text-align: center;
+}
+
+.color-themes-container {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.color-theme-option {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  padding: 0;
+  background: none;
+}
+
+.color-theme-option.selected {
+  border-color: var(--text-primary);
+  transform: scale(1.1);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+}
+
+.color-theme-option:hover {
+  transform: scale(1.1);
+}
+
+/* Toggle Switch */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-switch label {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.toggle-switch label:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+.toggle-switch input:checked + label {
+  background-color: var(--primary-color);
+}
+
+.toggle-switch input:checked + label:before {
+  transform: translateX(26px);
+}
+
+.toggle-switch input:disabled + label {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Backup options */
+.backup-option {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.backup-button {
+  margin-bottom: 0.5rem;
+}
+
+.settings-description {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.import-label {
+  cursor: pointer;
+  margin: 0;
+}
+
+.settings-actions {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Responsywność */
+@media (max-width: 768px) {
+  .settings-container {
+    flex-direction: column;
+  }
+  
+  .settings-sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.5rem 0;
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  
+  .settings-sidebar::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .settings-tab {
+    flex-direction: column;
+    padding: 0.5rem;
+    border-left: none;
+    border-bottom: 3px solid transparent;
+  }
+  
+  .settings-tab.active {
+    border-left-color: transparent;
+    border-bottom-color: var(--primary-color);
+  }
+  
+  .settings-tab-icon {
+    margin-right: 0;
+    margin-bottom: 0.25rem;
+  }
+  
+  .settings-tab-text {
+    font-size: 0.75rem;
+  }
+  
+  .settings-option {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .settings-option label {
+    margin-bottom: 0.5rem;
+  }
+  
+  .settings-option select,
+  .settings-option input[type="number"] {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .settings-modal {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    border-radius: 0;
+  }
+  
+  .settings-content {
+    padding: 1rem;
+  }
+}

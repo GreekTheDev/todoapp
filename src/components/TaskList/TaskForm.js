@@ -1,16 +1,24 @@
 import React, { useState, useContext, useRef, useEffect } from 'react';
 import { TaskContext } from '../../context/TaskContext';
+import { LanguageContext } from '../../context/LanguageContext';
 import Button from '../UI/Button';
 import Modal from '../UI/Modal';
 import { DatePicker, ConfigProvider } from 'antd';
 import dayjs from 'dayjs';
 import 'dayjs/locale/pl'; // Importuj polską lokalizację dla dayjs
-import locale from 'antd/locale/pl_PL'; // Importuj polską lokalizację dla antd
+import 'dayjs/locale/en'; // Importuj angielską lokalizację dla dayjs
+import 'dayjs/locale/de'; // Importuj niemiecką lokalizację dla dayjs
+import 'dayjs/locale/fr'; // Importuj francuską lokalizację dla dayjs
+import plLocale from 'antd/locale/pl_PL'; // Importuj polską lokalizację dla antd
+import enLocale from 'antd/locale/en_US'; // Importuj angielską lokalizację dla antd
+import deLocale from 'antd/locale/de_DE'; // Importuj niemiecką lokalizację dla antd
+import frLocale from 'antd/locale/fr_FR'; // Importuj francuską lokalizację dla antd
 import { FiChevronDown, FiX } from 'react-icons/fi';
 import './TaskForm.css';
 
 const TaskForm = ({ onClose, projectId, editTask = null }) => {
   const { addTask, updateTask } = useContext(TaskContext);
+  const { language, t } = useContext(LanguageContext);
   const [task, setTask] = useState({
     title: editTask ? editTask.title : '',
     description: editTask ? editTask.description : '',
@@ -439,7 +447,7 @@ const TaskForm = ({ onClose, projectId, editTask = null }) => {
   
   // Funkcja pomocnicza do renderowania etykiety priorytetu
   const getPriorityLabel = () => {
-    if (!task.priority) return 'Priorytet';
+    if (!task.priority) return t('priority');
     
     const priorityIcons = {
       low: '❯',
@@ -448,9 +456,9 @@ const TaskForm = ({ onClose, projectId, editTask = null }) => {
     };
     
     const priorityNames = {
-      low: 'Niski',
-      medium: 'Średni',
-      high: 'Wysoki'
+      low: t('priorityLow'),
+      medium: t('priorityMedium'),
+      high: t('priorityHigh')
     };
     
     return (
@@ -461,30 +469,30 @@ const TaskForm = ({ onClose, projectId, editTask = null }) => {
     );
   };
 
-  // Ustawienie polskiej lokalizacji dla dayjs
+  // Ustawienie odpowiedniej lokalizacji dla dayjs
   useEffect(() => {
-    dayjs.locale('pl');
-  }, []);
+    dayjs.locale(language);
+  }, [language]);
 
   return (
     <Modal 
       isOpen={true} 
       onClose={onClose}
-      title={showMultilineDialog ? "Wykryto wiele linii tekstu" : (editTask ? "Edytuj zadanie" : "Nowe zadanie")}
+      title={showMultilineDialog ? t('multilineDetected') : (editTask ? t('editTask') : t('newTask'))}
       size="medium"
     >
       {showMultilineDialog ? (
         <div className="multiline-dialog">
           <p className="multiline-dialog-description">
-            Wykryto wklejenie wielu linii tekstu. Jak chcesz je dodać?
+            {t('multilineDescription')}
           </p>
           
           <div className="multiline-preview">
             <div className="multiline-preview-main">
-              <strong>Zadanie główne:</strong> {firstLine}
+              <strong>{t('mainTask')}:</strong> {firstLine}
             </div>
             <div className="multiline-preview-subtasks">
-              <strong>Pozostałe linie ({remainingLines.length}):</strong>
+              <strong>{t('remainingLines')} ({remainingLines.length}):</strong>
               <ul>
                 {remainingLines.map((line, index) => (
                   <li key={index}>{line}</li>
@@ -499,21 +507,21 @@ const TaskForm = ({ onClose, projectId, editTask = null }) => {
               variant="primary"
               onClick={() => handleMultilineOption('subtasks')}
             >
-              Dodaj jako jedno zadanie z podzadaniami
+              {t('addAsOneWithSubtasks')}
             </Button>
             <Button 
               type="button" 
               variant="secondary"
               onClick={() => handleMultilineOption('separate')}
             >
-              Dodaj jako osobne zadania
+              {t('addAsSeparateTasks')}
             </Button>
             <Button 
               type="button" 
               variant="text"
               onClick={() => handleMultilineOption('cancel')}
             >
-              Anuluj
+              {t('cancel')}
             </Button>
           </div>
         </div>
@@ -526,7 +534,7 @@ const TaskForm = ({ onClose, projectId, editTask = null }) => {
               name="title"
               value={task.title}
               onChange={handleChange}
-              placeholder="Nazwa zadania"
+              placeholder={t('taskNamePlaceholder')}
               autoFocus
               className="title-input"
             />
@@ -539,7 +547,7 @@ const TaskForm = ({ onClose, projectId, editTask = null }) => {
               name="description"
               value={task.description}
               onChange={handleChange}
-              placeholder="Opis"
+              placeholder={t('descriptionPlaceholder')}
               className="description-input"
             />
           </div>
@@ -557,7 +565,7 @@ const TaskForm = ({ onClose, projectId, editTask = null }) => {
                     type="button" 
                     className="clear-priority-button"
                     onClick={removePriority}
-                    aria-label="Usuń priorytet"
+                    aria-label={t('removePriority')}
                   >
                     <FiX />
                   </button>
@@ -573,32 +581,37 @@ const TaskForm = ({ onClose, projectId, editTask = null }) => {
                     onClick={() => handlePriorityChange('low')}
                   >
                     <span className="priority-icon">❯</span>
-                    <span className="priority-name">Niski</span>
+                    <span className="priority-name">{t('priorityLow')}</span>
                   </div>
                   <div 
                     className="priority-dropdown-item medium"
                     onClick={() => handlePriorityChange('medium')}
                   >
                     <span className="priority-icon">❯❯</span>
-                    <span className="priority-name">Średni</span>
+                    <span className="priority-name">{t('priorityMedium')}</span>
                   </div>
                   <div 
                     className="priority-dropdown-item high"
                     onClick={() => handlePriorityChange('high')}
                   >
                     <span className="priority-icon">❯❯❯</span>
-                    <span className="priority-name">Wysoki</span>
+                    <span className="priority-name">{t('priorityHigh')}</span>
                   </div>
                 </div>
               )}
             </div>
             
-            <ConfigProvider locale={locale}>
+            <ConfigProvider locale={
+              language === 'pl' ? plLocale :
+              language === 'en' ? enLocale :
+              language === 'de' ? deLocale :
+              language === 'fr' ? frLocale : plLocale
+            }>
               <div className="date-picker-container">
                 <DatePicker
                   onChange={handleDateChange}
                   format="DD.MM.YYYY"
-                  placeholder="Termin"
+                  placeholder={t('dueDatePlaceholder')}
                   className="date-picker"
                   value={task.dueDate ? dayjs(task.dueDate) : null}
                   disabledDate={(current) => current && current < dayjs().startOf('day')}
@@ -612,21 +625,21 @@ const TaskForm = ({ onClose, projectId, editTask = null }) => {
                         className="date-preset-button"
                         onClick={() => handleDateChange(dayjs())}
                       >
-                        Dzisiaj
+                        {t('today')}
                       </button>
                       <button 
                         type="button" 
                         className="date-preset-button"
                         onClick={() => handleDateChange(dayjs().add(1, 'day'))}
                       >
-                        Jutro
+                        {t('tomorrow')}
                       </button>
                       <button 
                         type="button" 
                         className="date-preset-button"
                         onClick={() => handleDateChange(dayjs().add(7, 'days'))}
                       >
-                        Za tydzień
+                        {t('nextWeek')}
                       </button>
                     </div>
                   )}
@@ -642,14 +655,14 @@ const TaskForm = ({ onClose, projectId, editTask = null }) => {
               disabled={isSubmitDisabled}
               className={isSubmitDisabled ? 'button-disabled' : ''}
             >
-              {editTask ? 'Zapisz zmiany' : 'Dodaj zadanie'}
+              {editTask ? t('saveChanges') : t('addTask')}
             </Button>
             <Button 
               type="button" 
               variant="text" 
               onClick={onClose}
             >
-              Anuluj
+              {t('cancel')}
             </Button>
           </div>
         </form>

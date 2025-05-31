@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { LanguageContext } from '../../context/LanguageContext';
 import Modal from '../UI/Modal';
 import Button from '../UI/Button';
 import './DeleteTaskModal.css';
 
 const DeleteTaskModal = ({ isOpen, onClose, onConfirm, taskTitle }) => {
+  const { t } = useContext(LanguageContext);
+  
   const handleConfirm = () => {
     onConfirm();
     onClose();
@@ -22,20 +25,20 @@ const DeleteTaskModal = ({ isOpen, onClose, onConfirm, taskTitle }) => {
             variant="error" 
             onClick={handleConfirm}
           >
-            Usuń
+            {t('delete')}
           </Button>
           <Button 
             variant="text" 
             onClick={onClose}
           >
-            Anuluj
+            {t('cancel')}
           </Button>
         </>
       }
     >
       <div className="delete-task-content">
         <p className="delete-task-message">
-          Usunąć zadanie <span className="delete-task-title">{taskTitle}</span>?
+          {t('confirmDelete')} <span className="delete-task-title">{taskTitle}</span>?
         </p>
       </div>
     </Modal>
