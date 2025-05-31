@@ -222,6 +222,23 @@
   cursor: not-allowed;
 }
 
+/* Kontener dla wyboru daty */
+.date-selection-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  width: 100%;
+}
+
+/* Przyciski szybkiego wyboru daty */
+.date-quick-buttons {
+  display: flex;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-md);
+  width: 100%;
+  justify-content: space-between;
+}
+
 /* Ant Design DatePicker customization */
 .date-picker-container {
   flex: 1;
@@ -263,18 +280,24 @@
 }
 
 .date-preset-button {
-  background: none;
-  border: none;
+  background-color: var(--surface-color);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--border-radius-sm);
-  font-size: 0.85rem;
-  color: var(--primary-color);
+  font-size: 0.9rem;
+  color: var(--text-primary);
   cursor: pointer;
-  transition: background-color var(--transition-fast);
+  transition: all var(--transition-fast);
+  flex: 1;
+  text-align: center;
+  min-width: 0;
+  white-space: nowrap;
 }
 
 .date-preset-button:hover {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: rgba(var(--primary-color-rgb), 0.1);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
 }
 
 /* Style dla wykrytej daty w tytule */
@@ -358,11 +381,15 @@
 
 /* Style dla trybu ciemnego dla predefiniowanych zakresów dat */
 [data-theme="dark"] .date-preset-button {
-  color: var(--primary-color);
+  background-color: var(--surface-color);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
 }
 
 [data-theme="dark"] .date-preset-button:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(var(--primary-color-rgb), 0.2);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
 }
 
 /* Style dla trybu ciemnego dla wykrytej daty w tytule */
@@ -384,6 +411,15 @@
   
   .date-picker {
     width: 100%;
+  }
+  
+  .date-quick-buttons {
+    flex-wrap: wrap;
+  }
+  
+  .date-preset-button {
+    flex: 1 0 auto;
+    min-width: 80px;
   }
   
   .form-actions {

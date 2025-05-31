@@ -350,6 +350,41 @@ const TaskItem = ({ task }) => {
                 allowClear={true}
               />
             </div>
+            
+            {/* Przyciski szybkiego wyboru daty */}
+            <div className="date-quick-buttons">
+              <button 
+                type="button" 
+                className="date-preset-button"
+                onClick={() => {
+                  // Ustaw datę na dzisiaj
+                  setSubtaskDueDate(dayjs());
+                }}
+              >
+                Dzisiaj
+              </button>
+              <button 
+                type="button" 
+                className="date-preset-button"
+                onClick={() => {
+                  // Ustaw datę na jutro
+                  setSubtaskDueDate(dayjs().add(1, 'day'));
+                }}
+              >
+                Jutro
+              </button>
+              <button 
+                type="button" 
+                className="date-preset-button"
+                onClick={() => {
+                  // Ustaw datę na za tydzień
+                  setSubtaskDueDate(dayjs().add(7, 'days'));
+                }}
+              >
+                Za tydzień
+              </button>
+            </div>
+            
             <Button 
               type="submit" 
               variant="primary" 

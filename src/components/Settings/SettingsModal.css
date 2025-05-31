@@ -124,7 +124,7 @@
 
 .color-themes-container {
   display: flex;
-  gap: 12px;
+  gap: 16px;
   flex-wrap: wrap;
   margin: 20px;
   justify-content: space-around;

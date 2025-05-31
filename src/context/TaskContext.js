@@ -293,7 +293,8 @@ export const TaskProvider = ({ children }) => {
   // Filter tasks by project
   const getTasksByProject = (projectId) => {
     if (projectId === 'all') {
-      return tasks;
+      // Dla projektu "Wszystkie zadania" pokazuj tylko nieukończone zadania
+      return tasks.filter(task => !task.completed);
     }
     return tasks.filter(task => task.projectId === projectId);
   };

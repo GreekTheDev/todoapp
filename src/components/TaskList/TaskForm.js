@@ -38,6 +38,8 @@ const TaskForm = ({ onClose, projectId, editTask = null }) => {
   const [showPriorityDropdown, setShowPriorityDropdown] = useState(false);
   const priorityRef = useRef(null);
   
+  // Stan dla dropdown priorytetu (usunięto nieużywane zmienne)
+  
   // Stan dla obsługi wklejania wielu linii
   const [showMultilineDialog, setShowMultilineDialog] = useState(false);
   const [firstLine, setFirstLine] = useState('');
@@ -207,6 +209,7 @@ const TaskForm = ({ onClose, projectId, editTask = null }) => {
   };
 
   const handleDateChange = (date, dateString) => {
+    console.log("handleDateChange called with:", date);
     setTask({ ...task, dueDate: date ? date.toISOString() : null });
   };
   
@@ -616,36 +619,52 @@ const TaskForm = ({ onClose, projectId, editTask = null }) => {
                   value={task.dueDate ? dayjs(task.dueDate) : null}
                   disabledDate={(current) => current && current < dayjs().startOf('day')}
                   allowClear={true}
-                  onClick={(e) => e.stopPropagation()} // Zatrzymaj propagację zdarzenia kliknięcia
-                  onMouseDown={(e) => e.stopPropagation()} // Zatrzymaj propagację zdarzenia mousedown
-                  renderExtraFooter={() => (
-                    <div className="date-picker-presets">
-                      <button 
-                        type="button" 
-                        className="date-preset-button"
-                        onClick={() => handleDateChange(dayjs())}
-                      >
-                        {t('today')}
-                      </button>
-                      <button 
-                        type="button" 
-                        className="date-preset-button"
-                        onClick={() => handleDateChange(dayjs().add(1, 'day'))}
-                      >
-                        {t('tomorrow')}
-                      </button>
-                      <button 
-                        type="button" 
-                        className="date-preset-button"
-                        onClick={() => handleDateChange(dayjs().add(7, 'days'))}
-                      >
-                        {t('nextWeek')}
-                      </button>
-                    </div>
-                  )}
                 />
               </div>
             </ConfigProvider>
+          </div>
+          
+          {/* Przyciski szybkiego wyboru daty w nowej linii */}
+          <div className="date-quick-buttons">
+            <button 
+              type="button" 
+              className="date-preset-button"
+              onClick={() => {
+                // Ustaw datę na dzisiaj
+                setTask(prevTask => ({ 
+                  ...prevTask, 
+                  dueDate: dayjs().toISOString() 
+                }));
+              }}
+            >
+              {t('today')}
+            </button>
+            <button 
+              type="button" 
+              className="date-preset-button"
+              onClick={() => {
+                // Ustaw datę na jutro
+                setTask(prevTask => ({ 
+                  ...prevTask, 
+                  dueDate: dayjs().add(1, 'day').toISOString() 
+                }));
+              }}
+            >
+              {t('tomorrow')}
+            </button>
+            <button 
+              type="button" 
+              className="date-preset-button"
+              onClick={() => {
+                // Ustaw datę na za tydzień
+                setTask(prevTask => ({ 
+                  ...prevTask, 
+                  dueDate: dayjs().add(7, 'days').toISOString() 
+                }));
+              }}
+            >
+              {t('nextWeek')}
+            </button>
           </div>
           
           <div className="form-actions">

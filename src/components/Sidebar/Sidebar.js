@@ -120,7 +120,8 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, isMobile }) => {
   // Funkcja zliczająca zadania w projekcie
   const countTasksInProject = (projectId) => {
     if (projectId === 'all') {
-      return tasks.length;
+      // Dla projektu "Wszystkie zadania" zliczaj tylko nieukończone zadania
+      return tasks.filter(task => !task.completed).length;
     } else if (projectId === 'completed') {
       return tasks.filter(task => task.completed).length;
     } else {

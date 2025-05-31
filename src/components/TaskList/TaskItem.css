@@ -301,6 +301,48 @@
   margin-top: var(--spacing-xs);
 }
 
+/* Style dla przycisków szybkiego wyboru daty */
+.date-quick-buttons {
+  display: flex;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) 0;
+  margin-bottom: var(--spacing-xs);
+}
+
+.date-preset-button {
+  background-color: var(--surface-color);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  flex: 1;
+  text-align: center;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.date-preset-button:hover {
+  background-color: rgba(var(--primary-color-rgb), 0.1);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+/* Style dla trybu ciemnego */
+[data-theme="dark"] .date-preset-button {
+  background-color: var(--surface-color);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .date-preset-button:hover {
+  background-color: rgba(var(--primary-color-rgb), 0.2);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
 /* Dropdown priorytetu */
 .priority-dropdown-container {
   position: relative;
@@ -476,6 +518,18 @@
     display: flex;
     flex-direction: column;
     gap: var(--spacing-sm);
+  }
+  
+  /* Responsywne style dla przycisków szybkiego wyboru daty */
+  .date-quick-buttons {
+    flex-wrap: wrap;
+  }
+  
+  .date-preset-button {
+    flex: 1 0 auto;
+    min-width: 80px;
+    font-size: 0.8rem;
+    padding: var(--spacing-xs) var(--spacing-xs);
   }
   
   /* Pierwsza linia: checkbox, tytuł i przyciski akcji */
